@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 70" width="220" height="70">
+  <!-- Main wallet card background -->
+  <rect x="8" y="14" width="38" height="42" rx="8" fill="#1BA085"/>
+  
+  <!-- Card front panel -->
+  <rect x="12" y="18" width="30" height="34" rx="6" fill="#1BA085" opacity="0.9"/>
+  
+  <!-- Top chip/slot -->
+  <rect x="18" y="24" width="18" height="3" rx="1.5" fill="white"/>
+  
+  <!-- Bottom left coin slot -->
+  <circle cx="22" cy="40" r="3.5" fill="white"/>
+  
+  <!-- Bottom right coin slot -->
+  <circle cx="34" cy="40" r="3.5" fill="white"/>
+  
+  <!-- Text: Save2740. -->
+  <text x="58" y="43" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="24" font-weight="600" fill="#1BA085" letter-spacing="0.3">
+    Save2740.
+  </text>
+</svg>
