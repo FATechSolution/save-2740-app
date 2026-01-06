@@ -49,14 +49,14 @@ export function LogoutModal({ open, onOpenChange }: LogoutModalProps) {
       onOpenChange(false);
 
       // Redirect to login
-      router.push('/login');
+      router.push('/auth/login');
     } catch (error) {
       console.error('Logout error:', error);
       // Still logout on error
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       onOpenChange(false);
-      router.push('/login');
+      router.push('/auth/login');
     } finally {
       setLoading(false);
     }
