@@ -56,10 +56,10 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Left Side - Dark Green */}
-      <div className="w-full lg:w-1/2 bg-gradient-to-b from-[#064E3B] to-[#0D6948] text-white p-4 sm:p-6 lg:p-8 xl:p-12 flex flex-col justify-start lg:justify-between min-h-auto lg:min-h-screen">
+      <div className="w-full lg:w-1/2 bg-gradient-to-b from-[#064E3B] to-[#0D6948] text-white p-4 sm:p-6 lg:p-8 xl:p-12 flex flex-col justify-start lg:justify-between">
         <div>
           {/* Logo */}
-          <div className="mb-4 sm:mb-6 lg:mb-12 lg:mb-16">
+          <div className="mb-2 sm:mb-4 lg:mb-12 lg:mb-16">
             <img
               src="/login-logo.png"
               alt="Save2740 Logo"
@@ -68,7 +68,7 @@ export default function LoginPage() {
           </div>
 
           {/* Heading */}
-          <h1 className="text-xl sm:text-2xl lg:text-4xl xl:text-5xl font-bold leading-tight mb-2 sm:mb-3 lg:mb-6">
+          <h1 className="text-lg sm:text-xl lg:text-4xl xl:text-5xl font-bold leading-tight mb-1.5 sm:mb-2 lg:mb-6">
             Master Your Savings Habit.
           </h1>
 
@@ -79,30 +79,30 @@ export default function LoginPage() {
         </div>
 
         {/* Features at bottom */}
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-8 mt-6 lg:mt-0">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-8 mt-4 lg:mt-0">
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
-              <Check size={14} className="text-white sm:w-4 lg:w-5" strokeWidth={3} />
+            <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
+              <Check size={12} className="text-white sm:w-3 lg:w-5" strokeWidth={3} />
             </div>
-            <span className="text-xs sm:text-xs lg:text-base text-gray-100 font-medium">Streak Tracking</span>
+            <span className="text-xs lg:text-base text-gray-100 font-medium">Streak Tracking</span>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
-              <Check size={14} className="text-white sm:w-4 lg:w-5" strokeWidth={3} />
+            <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
+              <Check size={12} className="text-white sm:w-3 lg:w-5" strokeWidth={3} />
             </div>
-            <span className="text-xs sm:text-xs lg:text-base text-gray-100 font-medium">Multipliers</span>
+            <span className="text-xs lg:text-base text-gray-100 font-medium">Multipliers</span>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
-              <Check size={14} className="text-white sm:w-4 lg:w-5" strokeWidth={3} />
+            <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
+              <Check size={12} className="text-white sm:w-3 lg:w-5" strokeWidth={3} />
             </div>
-            <span className="text-xs sm:text-xs lg:text-base text-gray-100 font-medium">Secure Wallet</span>
+            <span className="text-xs lg:text-base text-gray-100 font-medium">Secure Wallet</span>
           </div>
         </div>
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 bg-gray-50 flex items-center justify-center p-4 sm:p-6 min-h-screen lg:min-h-auto">
+      <div className="w-full lg:w-1/2 bg-gray-50 flex items-center justify-center p-4 sm:p-6 py-6 lg:py-0 min-h-auto lg:min-h-screen">
         <div className="w-full max-w-md">
           {/* Heading */}
           <div className="text-center mb-6 sm:mb-8">
