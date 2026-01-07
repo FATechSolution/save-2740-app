@@ -166,7 +166,7 @@ export function Sidebar({ onClose }: SidebarProps) {
       </div>
 
       {/* Navigation - Scrollable */}
-      <nav className="flex-1 overflow-y-auto px-3 sm:px-4 md:px-6 space-y-0.5 sm:space-y-1 md:space-y-2">
+      <nav className="flex-1 overflow-y-auto hide-scrollbar px-3 sm:px-4 md:px-6 space-y-0.5 sm:space-y-1 md:space-y-2 pb-4">
         {navItems.map((item, index) => {
           const isActive = pathname === item.href
           return (
@@ -174,8 +174,9 @@ export function Sidebar({ onClose }: SidebarProps) {
               key={item.label}
               href={item.href}
               onClick={onClose}
+              prefetch={true}
               className={cn(
-                "flex items-center gap-3 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-3 rounded-lg md:rounded-xl transition-colors text-xs sm:text-sm md:text-base",
+                "flex items-center gap-3 px-1 sm:px-1.5 md:px-2 py-1.5 sm:py-2 md:py-3 rounded-lg md:rounded-xl transition-colors text-xs sm:text-sm md:text-base",
                 isActive ? "bg-emerald-50 text-brand-green font-medium shadow-sm" : "text-slate-500",
               )}
               style={{ animationDelay: `${index * 50}ms` }}
@@ -189,6 +190,55 @@ export function Sidebar({ onClose }: SidebarProps) {
             </Link>
           )
         })}
+
+        {/* Useful Links Section */}
+        <div className="pt-4 mt-4 border-t border-slate-100">
+          <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider px-2 sm:px-3 md:px-4 mb-2">
+            Useful Links
+          </h3>
+          <div className="space-y-1">
+            <Link
+              href="/privacy-policy"
+              onClick={onClose}
+              prefetch={true}
+              className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/terms-conditions"
+              onClick={onClose}
+              prefetch={true}
+              className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
+            >
+              Terms & Conditions
+            </Link>
+            <Link
+              href="/savings-challenge-disclaimer"
+              onClick={onClose}
+              prefetch={true}
+              className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
+            >
+              Savings Challenge Disclaimer
+            </Link>
+            <Link
+              href="/subscription-refund-policy"
+              onClick={onClose}
+              prefetch={true}
+              className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
+            >
+              Subscription & refund policy
+            </Link>
+            <Link
+              href="/affiliate-referral-policy"
+              onClick={onClose}
+              prefetch={true}
+              className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
+            >
+              Affiliate / referral policy
+            </Link>
+          </div>
+        </div>
       </nav>
 
       {/* Footer Section - Fixed at Bottom */}
@@ -196,14 +246,14 @@ export function Sidebar({ onClose }: SidebarProps) {
         <img
           src="/kyc-button.png"
           alt="KYC Required"
-          className="w-full h-auto max-h-12 object-contain"
+          className="h-auto max-h-12 object-contain"
         />
 
         <div className="space-y-3 sm:space-y-4">
           <img
             src="/profile-section.png"
             alt="User Profile"
-            className="w-full h-auto max-h-16 object-contain cursor-pointer"
+            className="h-auto max-h-12 object-contain cursor-pointer"
             onClick={() => window.location.href = '/profile'}
           />
 

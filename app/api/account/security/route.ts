@@ -80,12 +80,12 @@ export async function PUT(request: NextRequest) {
         { success: true, message: 'Phone changed successfully' },
         { status: 200 }
       )
+
+    } catch (error) {
+      console.error('Security update error:', error)
+      return NextResponse.json(
+        { success: false, error: 'Failed to update security settings' },
+        { status: 500 }
+      )
     }
-  } catch (error) {
-    console.error('Security update error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to update security settings' },
-      { status: 500 }
-    )
   }
-}

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { AlertTriangle, X, Calendar } from "lucide-react"
+import { Flame, X, Calendar, Clock, TrendingUp } from "lucide-react"
 import { useWallet } from "@/hooks/use-wallet"
 
 /**
@@ -43,75 +43,104 @@ export function MissedDayWarning() {
   const dailyAmount = data?.dailySavingAmount || 27.4
 
   return (
-    <div className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 max-w-sm animate-in slide-in-from-top-2">
-      <div className="bg-white rounded-2xl shadow-xl border-2 border-orange-200 overflow-hidden">
-        {/* Header with gradient */}
-        <div className="bg-gradient-to-r from-orange-500 to-red-500 p-4 flex items-start justify-between gap-3">
-          <div className="flex items-start gap-3 flex-1">
-            <AlertTriangle className="w-6 h-6 text-white flex-shrink-0 mt-0.5 animate-pulse" />
-            <div>
-              <h3 className="font-bold text-white text-sm sm:text-base">
-                Don't Break Your Streak!
-              </h3>
-              <p className="text-white/90 text-xs sm:text-sm mt-1">
-                You haven't contributed today yet.
-              </p>
+    <div className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 max-w-md animate-fade-in">
+      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden backdrop-blur-sm">
+        {/* Header */}
+        <div className="bg-gradient-to-br from-slate-50 to-slate-100 px-5 py-4 border-b border-slate-200">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-3 flex-1">
+              <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                <Flame className="w-5 h-5 text-orange-500 animate-pulse" />
+              </div>
+              <div>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">
+                  Keep Your Streak Alive!
+                </h3>
+                <p className="text-slate-600 text-sm mt-1">
+                  You haven't saved today yet
+                </p>
+              </div>
             </div>
+            <button
+              onClick={() => setIsDismissed(true)}
+              className="text-slate-400 hover:text-slate-600 hover:bg-slate-200 p-1.5 rounded-lg transition-colors flex-shrink-0"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
-          <button
-            onClick={() => setIsDismissed(true)}
-            className="text-white hover:bg-white/20 p-1 rounded transition-colors flex-shrink-0"
-          >
-            <X className="w-5 h-5" />
-          </button>
         </div>
 
         {/* Content */}
-        <div className="p-4 space-y-3">
-          <div className="grid grid-cols-2 gap-3">
-            {/* Streak info */}
-            <div className="bg-orange-50 rounded-lg p-3 border border-orange-100">
-              <div className="flex items-center gap-2 mb-2">
-                <Calendar className="w-4 h-4 text-orange-600" />
-                <span className="text-xs font-semibold text-slate-600 uppercase">
-                  Current Streak
+        <div className="p-5 space-y-4">
+          {/* Stats Grid */}
+          <div className="grid grid-cols-3 gap-3">
+            {/* Streak */}
+            <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-xl p-3 border border-orange-200/50">
+              <div className="flex items-center gap-1.5 mb-2">
+                <Flame className="w-3.5 h-3.5 text-orange-500" />
+                <span className="text-xs font-semibold text-slate-700 uppercase tracking-wide">
+                  Streak
                 </span>
               </div>
-              <p className="text-2xl font-bold text-orange-600">
+              <p className="text-3xl font-bold text-orange-600 leading-none">
                 {data?.currentStreak || 0}
               </p>
-              <p className="text-xs text-slate-600 mt-1">days</p>
+              <p className="text-xs text-slate-600 mt-1.5">days</p>
             </div>
 
-            {/* Time left */}
-            <div className="bg-amber-50 rounded-lg p-3 border border-amber-100">
-              <div className="text-xs font-semibold text-slate-600 uppercase mb-2">
-                Time Left
+            {/* Time Left */}
+            <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl p-3 border border-amber-200/50">
+              <div className="flex items-center gap-1.5 mb-2">
+                <Clock className="w-3.5 h-3.5 text-amber-600" />
+                <span className="text-xs font-semibold text-slate-700 uppercase tracking-wide">
+                  Time
+                </span>
               </div>
-              <p className="text-2xl font-bold text-amber-600">{hoursLeft}</p>
-              <p className="text-xs text-slate-600 mt-1">hours</p>
+              <p className="text-3xl font-bold text-amber-600 leading-none">{hoursLeft}</p>
+              <p className="text-xs text-slate-600 mt-1.5">hours</p>
+            </div>
+
+            {/* Goal */}
+            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100/50 rounded-xl p-3 border border-emerald-200/50">
+              <div className="flex items-center gap-1.5 mb-2">
+                <TrendingUp className="w-3.5 h-3.5 text-brand-green" />
+                <span className="text-xs font-semibold text-slate-700 uppercase tracking-wide">
+                  Goal
+                </span>
+              </div>
+              <p className="text-xl font-bold text-brand-green leading-none">
+                ${dailyAmount.toFixed(0)}
+              </p>
+              <p className="text-xs text-slate-600 mt-1.5">today</p>
             </div>
           </div>
 
-          {/* Amount to save */}
-          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-lg p-3 border border-emerald-200">
-            <p className="text-xs font-semibold text-slate-600 uppercase mb-1">
-              Amount to Save
+          {/* Amount Highlight */}
+          <div className="bg-gradient-to-br from-brand-green to-emerald-600 rounded-xl p-4 text-center">
+            <p className="text-sm font-semibold text-white/90 mb-1">
+              Daily Savings Amount
             </p>
-            <p className="text-3xl font-bold text-emerald-600">
+            <p className="text-4xl font-bold text-white mb-1">
               ${dailyAmount.toFixed(2)}
+            </p>
+            <p className="text-xs text-white/80">
+              Save now to maintain your streak
             </p>
           </div>
 
           {/* Action button */}
-          <button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg transition-all transform hover:scale-105">
+          <button className="w-full bg-brand-green hover:bg-emerald-600 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-2">
+            <Flame className="w-5 h-5" />
             Contribute Now
           </button>
 
           {/* Encouragement */}
-          <p className="text-xs text-slate-600 text-center italic">
-            Keep your streak alive and stay on track with your savings goal!
-          </p>
+          <div className="flex items-start gap-2 bg-slate-50 rounded-lg p-3">
+            <Calendar className="w-4 h-4 text-slate-500 flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Don't let your progress slip away! Keep your streak alive and stay on track with your savings goal.
+            </p>
+          </div>
         </div>
       </div>
     </div>

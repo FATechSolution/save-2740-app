@@ -59,7 +59,7 @@ export function DashboardHeader({ title = "Dashboard", onMenuClick }: DashboardH
             </div>
 
             {/* Right side - Controls */}
-            <div className="flex items-center gap-2 sm:gap-3 md:gap-4 shrink-0">
+            <div className="flex items-center gap-2 sm:gap-2 md:gap-3 shrink-0">
               {/* Auto-save / Manual Toggle */}
               <div className="bg-slate-50 rounded-full p-0.5 sm:p-1 flex items-center shadow-sm border border-slate-200">
                 <button className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-xs md:text-sm font-medium bg-white text-brand-green whitespace-nowrap transition-colors shadow-sm">
