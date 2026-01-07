@@ -122,16 +122,17 @@ function WalletTransactionsPageContent() {
       <main className="flex-1 overflow-y-auto flex flex-col">
         <DashboardHeader title="Transactions" onMenuClick={() => setIsSidebarOpen(true)} />
 
-        <div className="flex-1 p-4 sm:p-6 md:p-8">
+        <div className="flex-1 p-2 sm:p-4 md:p-6 lg:p-8">
           <div className="max-w-6xl mx-auto">
             {/* Export CSV Button */}
-            <div className="flex justify-end mb-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+            <div className="flex justify-end mb-4 sm:mb-6 animate-fade-in px-2 sm:px-0" style={{ animationDelay: "0.1s" }}>
               <button
                 onClick={handleExport}
-                className="flex items-center gap-2 px-4 py-2 bg-brand-green text-white rounded-lg font-medium hover:bg-brand-green/90 hover:shadow-md transition-all duration-200 transform hover:scale-105"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm sm:text-base bg-brand-green text-white rounded-lg font-medium hover:bg-brand-green/90 hover:shadow-md transition-all duration-200 transform hover:scale-105 whitespace-nowrap"
               >
                 <Download className="w-4 h-4" />
-                Export CSV
+                <span className="hidden sm:inline">Export CSV</span>
+                <span className="sm:hidden">Export</span>
               </button>
             </div>
 
@@ -142,12 +143,12 @@ function WalletTransactionsPageContent() {
                   <table className="w-full">
                     <thead className="bg-slate-50 border-b border-slate-200">
                       <tr>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Description</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Transaction ID</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Bank</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Date</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Amount</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Status</th>
+                        <th className="px-2 sm:px-4 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-slate-700">Description</th>
+                        <th className="px-2 sm:px-4 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-slate-700">Trans ID</th>
+                        <th className="hidden sm:table-cell px-2 sm:px-4 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-slate-700">Bank</th>
+                        <th className="px-2 sm:px-4 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-slate-700">Date</th>
+                        <th className="px-2 sm:px-4 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-slate-700">Amount</th>
+                        <th className="px-2 sm:px-4 md:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-slate-700">Status</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-200">
@@ -157,11 +158,11 @@ function WalletTransactionsPageContent() {
                           className="bg-white hover:bg-slate-50 transition-colors duration-150 animate-fade-in"
                           style={{ animationDelay: `${0.3 + index * 0.05}s` }}
                         >
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 group-hover:bg-slate-200 transition-colors">
+                          <td className="px-2 sm:px-4 md:px-6 py-3 sm:py-4">
+                            <div className="flex items-center gap-2 sm:gap-3">
+                              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 group-hover:bg-slate-200 transition-colors">
                                 <svg
-                                  className="w-4 h-4 text-slate-600"
+                                  className="w-3 h-3 sm:w-4 sm:h-4 text-slate-600"
                                   fill="none"
                                   stroke="currentColor"
                                   viewBox="0 0 24 24"
@@ -174,30 +175,30 @@ function WalletTransactionsPageContent() {
                                   />
                                 </svg>
                               </div>
-                              <span className="text-sm text-slate-900">{transaction.description}</span>
+                              <span className="text-xs sm:text-sm text-slate-900">{transaction.description}</span>
                             </div>
                           </td>
-                          <td className="px-6 py-4">
-                            <span className="text-sm text-slate-900">{transaction.transactionId}</span>
+                          <td className="px-2 sm:px-4 md:px-6 py-3 sm:py-4">
+                            <span className="text-xs sm:text-sm text-slate-900 truncate">{transaction.transactionId}</span>
                           </td>
-                          <td className="px-6 py-4">
-                            <span className="text-sm text-slate-900">{transaction.bank}</span>
+                          <td className="hidden sm:table-cell px-2 sm:px-4 md:px-6 py-3 sm:py-4">
+                            <span className="text-xs sm:text-sm text-slate-900">{transaction.bank}</span>
                           </td>
-                          <td className="px-6 py-4">
-                            <span className="text-sm text-slate-900">{transaction.date}</span>
+                          <td className="px-2 sm:px-4 md:px-6 py-3 sm:py-4">
+                            <span className="text-xs sm:text-sm text-slate-900">{transaction.date}</span>
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-2 sm:px-4 md:px-6 py-3 sm:py-4">
                             {transaction.amount ? (
-                              <span className="text-sm font-semibold text-emerald-600">
+                              <span className="text-xs sm:text-sm font-semibold text-emerald-600">
                                 +${transaction.amount.toFixed(2)}
                               </span>
                             ) : (
-                              <span className="text-sm text-slate-400">-</span>
+                              <span className="text-xs sm:text-sm text-slate-400">-</span>
                             )}
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-2 sm:px-4 md:px-6 py-3 sm:py-4">
                             <span
-                              className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 ${getStatusColor(
+                              className={`px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium transition-all duration-200 whitespace-nowrap ${getStatusColor(
                                 transaction.status
                               )}`}
                             >
@@ -211,21 +212,21 @@ function WalletTransactionsPageContent() {
                 </div>
 
                 {/* Pagination */}
-                <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-slate-200">
+                <div className="flex items-center justify-center sm:justify-end gap-0.5 sm:gap-2 px-1 sm:px-4 md:px-6 py-2 sm:py-4 border-t border-slate-200">
                   <button
                     onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
-                    className="flex items-center gap-1 px-3 py-1.5 text-sm text-brand-green font-medium hover:bg-emerald-50 rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                    className="flex items-center gap-0.5 px-1.5 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-sm text-brand-green font-medium hover:bg-emerald-50 rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent whitespace-nowrap flex-shrink-0"
                   >
-                    <ChevronLeft className="w-4 h-4" />
-                    Previous
+                    <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="hidden sm:inline">Previous</span>
                   </button>
 
                   {[1, 2, 3, 4].map((page) => (
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`w-8 h-8 rounded text-sm font-medium transition-all duration-200 ${currentPage === page
+                      className={`w-6 h-6 sm:w-8 sm:h-8 rounded text-[10px] sm:text-sm font-medium transition-all duration-200 flex-shrink-0 ${currentPage === page
                         ? "bg-brand-green text-white shadow-md"
                         : "text-slate-700 hover:bg-slate-100"
                         }`}
@@ -237,10 +238,10 @@ function WalletTransactionsPageContent() {
                   <button
                     onClick={() => setCurrentPage((prev) => Math.min(4, prev + 1))}
                     disabled={currentPage === 4}
-                    className="flex items-center gap-1 px-3 py-1.5 text-sm text-brand-green font-medium hover:bg-emerald-50 rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                    className="flex items-center gap-0.5 px-1.5 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-sm text-brand-green font-medium hover:bg-emerald-50 rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent whitespace-nowrap flex-shrink-0"
                   >
-                    Next
-                    <ChevronRight className="w-4 h-4" />
+                    <span className="hidden sm:inline">Next</span>
+                    <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
                   </button>
                 </div>
               </CardContent>

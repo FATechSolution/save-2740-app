@@ -59,14 +59,13 @@ export function DashboardHeader({ title = "Dashboard", onMenuClick }: DashboardH
             </div>
 
             {/* Right side - Controls */}
-            <div className="flex items-center gap-2 sm:gap-2 md:gap-3 shrink-0">
+            <div className="flex items-center gap-1 sm:gap-2 md:gap-3 shrink-0">
               {/* Auto-save / Manual Toggle */}
               <div className="bg-slate-50 rounded-full p-0.5 sm:p-1 flex items-center shadow-sm border border-slate-200">
-                <button className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-xs md:text-sm font-medium bg-white text-brand-green whitespace-nowrap transition-colors shadow-sm">
-                  <span className="hidden sm:inline">Auto-save</span>
-                  <span className="sm:hidden">Auto</span>
+                <button className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs md:text-sm font-medium bg-white text-brand-green whitespace-nowrap transition-colors shadow-sm">
+                  Auto-save
                 </button>
-                <button className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-xs md:text-sm font-medium text-slate-500 whitespace-nowrap transition-colors">
+                <button className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs md:text-sm font-medium text-slate-500 whitespace-nowrap transition-colors">
                   Manual
                 </button>
               </div>
@@ -74,12 +73,12 @@ export function DashboardHeader({ title = "Dashboard", onMenuClick }: DashboardH
               {/* Bell Icon - Now Functional */}
               <button
                 onClick={() => setNotificationsOpen(true)}
-                className="relative bg-slate-50 p-1.5 sm:p-2 rounded-full shadow-sm hover:bg-slate-100 border border-slate-200 transition-colors"
+                className="relative bg-slate-50 p-2 sm:p-2 md:p-2.5 rounded-full shadow-sm hover:bg-slate-100 border border-slate-200 transition-colors flex-shrink-0"
               >
-                <Bell className="w-4 h-4 sm:w-5 md:w-5 h-4 md:h-5 text-slate-600" />
+                <Bell className="w-5 h-5 sm:w-5 md:w-6 text-slate-600" />
                 {unreadCount > 0 && (
-                  <div className="absolute top-1 sm:top-1.5 right-1 sm:right-1.5 min-w-[16px] h-4 bg-red-500 rounded-full border-2 border-white flex items-center justify-center">
-                    <span className="text-[10px] font-bold text-white px-1">{unreadCount}</span>
+                  <div className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-red-500 rounded-full border-2 border-white flex items-center justify-center">
+                    <span className="text-[10px] font-bold text-white px-0.5">{unreadCount}</span>
                   </div>
                 )}
               </button>
