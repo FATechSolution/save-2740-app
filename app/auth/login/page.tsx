@@ -56,9 +56,9 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+    <div className="min-h-screen flex flex-col md:flex-row overflow-hidden">
       {/* Left Side - Dark Green (All Screens - Stacks on top on mobile) */}
-      <div className="w-full md:w-1/2 bg-gradient-to-b from-[#064E3B] to-[#0D6948] text-white p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 flex flex-col justify-between min-h-[40vh] md:min-h-screen overflow-x-hidden">
+      <div className="w-full md:w-1/2 bg-gradient-to-b from-[#064E3B] to-[#0D6948] text-white p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 flex flex-col justify-between min-h-[55vh] md:min-h-screen overflow-y-auto overflow-x-hidden">
         <div>
           {/* Logo */}
           <div className="mb-6 sm:mb-8 md:mb-12 lg:mb-16">
@@ -82,38 +82,38 @@ export default function LoginPage() {
 
         {/* Features at bottom */}
         <div className="w-full max-w-full overflow-x-hidden">
-          <div className="flex items-center gap-0.5 sm:gap-3 md:gap-6 lg:gap-8 flex-nowrap mt-6 md:mt-0">
-            <div className="flex items-center gap-0.5 sm:gap-2 md:gap-3 flex-shrink-0">
-              <div className="w-3 h-3 sm:w-6 sm:h-6 md:w-8 md:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
-                <Check size={8} className="text-white sm:hidden" strokeWidth={3} />
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-6 lg:gap-8 flex-wrap mt-6 md:mt-0">
+            <div className="flex items-center gap-1 sm:gap-2 md:gap-3 flex-shrink-0">
+              <div className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
+                <Check size={10} className="text-white sm:hidden" strokeWidth={3} />
                 <Check size={14} className="text-white hidden sm:block md:hidden" strokeWidth={3} />
                 <Check size={18} className="text-white hidden md:block" strokeWidth={3} />
               </div>
-              <span className="text-[7px] sm:text-xs md:text-base text-gray-100 font-medium whitespace-nowrap">Streak Tracking</span>
+              <span className="text-[10px] sm:text-xs md:text-base text-gray-100 font-medium whitespace-nowrap">Streak Tracking</span>
             </div>
-            <div className="flex items-center gap-0.5 sm:gap-2 md:gap-3 flex-shrink-0">
-              <div className="w-3 h-3 sm:w-6 sm:h-6 md:w-8 md:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
-                <Check size={8} className="text-white sm:hidden" strokeWidth={3} />
+            <div className="flex items-center gap-1 sm:gap-2 md:gap-3 flex-shrink-0">
+              <div className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
+                <Check size={10} className="text-white sm:hidden" strokeWidth={3} />
                 <Check size={14} className="text-white hidden sm:block md:hidden" strokeWidth={3} />
                 <Check size={18} className="text-white hidden md:block" strokeWidth={3} />
               </div>
-              <span className="text-[7px] sm:text-xs md:text-base text-gray-100 font-medium whitespace-nowrap">Multipliers</span>
+              <span className="text-[10px] sm:text-xs md:text-base text-gray-100 font-medium whitespace-nowrap">Multipliers</span>
             </div>
-            <div className="flex items-center gap-0.5 sm:gap-2 md:gap-3 flex-shrink-0">
-              <div className="w-3 h-3 sm:w-6 sm:h-6 md:w-8 md:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
-                <Check size={8} className="text-white sm:hidden" strokeWidth={3} />
+            <div className="flex items-center gap-1 sm:gap-2 md:gap-3 flex-shrink-0">
+              <div className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
+                <Check size={10} className="text-white sm:hidden" strokeWidth={3} />
                 <Check size={14} className="text-white hidden sm:block md:hidden" strokeWidth={3} />
                 <Check size={18} className="text-white hidden md:block" strokeWidth={3} />
               </div>
-              <span className="text-[7px] sm:text-xs md:text-base text-gray-100 font-medium whitespace-nowrap">Secure Wallet</span>
+              <span className="text-[10px] sm:text-xs md:text-base text-gray-100 font-medium whitespace-nowrap">Secure Wallet</span>
             </div>
-            <div className="flex items-center gap-0.5 sm:gap-2 md:gap-3 flex-shrink-0">
-              <div className="w-3 h-3 sm:w-6 sm:h-6 md:w-8 md:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
-                <Check size={8} className="text-white sm:hidden" strokeWidth={3} />
+            <div className="flex items-center gap-1 sm:gap-2 md:gap-3 flex-shrink-0">
+              <div className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
+                <Check size={10} className="text-white sm:hidden" strokeWidth={3} />
                 <Check size={14} className="text-white hidden sm:block md:hidden" strokeWidth={3} />
                 <Check size={18} className="text-white hidden md:block" strokeWidth={3} />
               </div>
-              <span className="text-[7px] sm:text-xs md:text-base text-gray-100 font-medium whitespace-nowrap">Group Contribution</span>
+              <span className="text-[10px] sm:text-xs md:text-base text-gray-100 font-medium whitespace-nowrap">Group Contribution</span>
             </div>
           </div>
         </div>

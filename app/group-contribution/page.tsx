@@ -10,6 +10,7 @@ import { Sidebar } from "@/components/sidebar"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { Card, CardContent } from "@/components/ui/card"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
+import { useToast } from "@/components/ui/use-toast"
 
 interface GroupMember {
   id: string
@@ -35,6 +36,10 @@ interface Group {
   purpose: string
   contributionAmount: number
   frequency: "daily" | "weekly" | "monthly"
+  maxMembers: number
+  isLocked: boolean
+  startDate: string | null
+  endDate: string | null
   referralCode: string
   referralLink: string
   members: GroupMember[]
@@ -59,6 +64,7 @@ function GroupContributionPageContent() {
     purpose: "",
     contributionAmount: "",
     frequency: "weekly" as "daily" | "weekly" | "monthly",
+    maxMembers: "10", // Fixed at 10 for 1-year cycle
   })
 
   const [contributionData, setContributionData] = useState({
@@ -69,8 +75,28 @@ function GroupContributionPageContent() {
   const [joinData, setJoinData] = useState({
     referralCode: "",
   })
+  const { toast } = useToast()
 
   const [transactions, setTransactions] = useState<Transaction[]>([])
+
+  // Date calculation utility
+  const calculateEndDate = (startDate: Date, frequency: string, maxMembers: number): Date => {
+    const endDate = new Date(startDate)
+
+    switch (frequency) {
+      case "daily":
+        endDate.setDate(endDate.getDate() + maxMembers)
+        break
+      case "weekly":
+        endDate.setDate(endDate.getDate() + (maxMembers * 7))
+        break
+      case "monthly":
+        endDate.setMonth(endDate.getMonth() + maxMembers)
+        break
+    }
+
+    return endDate
+  }
 
   // Fetch groups on mount
   useEffect(() => {
@@ -88,6 +114,10 @@ function GroupContributionPageContent() {
           purpose: "Quarterly vacation fund",
           contributionAmount: 27.40,
           frequency: "weekly",
+          maxMembers: 10,
+          isLocked: false,
+          startDate: null,
+          endDate: null,
           referralCode: "FC2024",
           referralLink: "https://save2740.app/join/FC2024",
           balance: 1096,
@@ -173,6 +203,10 @@ function GroupContributionPageContent() {
         purpose: formData.purpose,
         contributionAmount: parseFloat(formData.contributionAmount),
         frequency: formData.frequency,
+        maxMembers: parseInt(formData.maxMembers),
+        isLocked: false,
+        startDate: null,
+        endDate: null,
         referralCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
         referralLink: `https://save2740.app/join/${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
         members: [
@@ -197,9 +231,19 @@ function GroupContributionPageContent() {
         purpose: "",
         contributionAmount: "",
         frequency: "weekly",
+        maxMembers: "10",
+      })
+      toast({
+        title: "Group Created!",
+        description: `${newGroup.name} has been successfully created.`,
       })
     } catch (err) {
       setError("Failed to create group")
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to create group. Please try again.",
+      })
     } finally {
       setLoading(false)
     }
@@ -216,7 +260,21 @@ function GroupContributionPageContent() {
         return
       }
 
-      // Add member to group
+      // Check if group is locked
+      if (groupToJoin.isLocked) {
+        setError("This group is full and no longer accepting members")
+        setLoading(false)
+        return
+      }
+
+      // Check if group is at max capacity
+      if (groupToJoin.members.length >= groupToJoin.maxMembers) {
+        setError("This group has reached maximum capacity")
+        setLoading(false)
+        return
+      }
+
+      // Add new member
       const newMember: GroupMember = {
         id: `member-${Date.now()}`,
         name: "New Member",
@@ -226,17 +284,43 @@ function GroupContributionPageContent() {
         referredBy: "Group Admin",
       }
 
-      const updatedGroup = {
+      const updatedMembers = [...groupToJoin.members, newMember]
+
+      // Check if max members reached after adding
+      const isNowFull = updatedMembers.length >= groupToJoin.maxMembers
+      let updatedGroup = {
         ...groupToJoin,
-        members: [...groupToJoin.members, newMember],
+        members: updatedMembers,
+        isLocked: isNowFull,
+      }
+
+      // If group is now full, set dates
+      if (isNowFull) {
+        const startDate = new Date()
+        const endDate = calculateEndDate(startDate, groupToJoin.frequency, groupToJoin.maxMembers)
+
+        updatedGroup = {
+          ...updatedGroup,
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+        }
       }
 
       setGroups(groups.map(g => g.id === groupToJoin.id ? updatedGroup : g))
       setSelectedGroup(updatedGroup)
       setJoinData({ referralCode: "" })
       setShowNewMemberModal(false)
+      toast({
+        title: "Joined Group!",
+        description: `You have successfully joined ${updatedGroup.name}.`,
+      })
     } catch (err) {
       setError("Failed to join group")
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to join group. Please try again.",
+      })
     } finally {
       setLoading(false)
     }
@@ -342,7 +426,7 @@ function GroupContributionPageContent() {
                         <span className="text-brand-green">Round-<br />Robin Bulk Saver</span>
                       </h1>
                       <p className="text-slate-600 text-base md:text-lg max-w-3xl mx-auto mb-6 md:mb-8">
-                        A teamwork savings mode for <span className="font-semibold text-slate-900">5 to 10 people</span>. Bulk contribution rotates member-to-member until everyone completes the cycle. <span className="font-semibold text-slate-900">Payout happens only after the full cycle is completed.</span>
+                        A teamwork savings mode for <span className="font-semibold text-slate-900">up to 10 members</span>. Bulk contribution rotates member-to-member until everyone completes the cycle. <span className="font-semibold text-slate-900">Payout happens only after the full cycle is completed.</span>
                       </p>
                     </div>
 
@@ -354,9 +438,9 @@ function GroupContributionPageContent() {
                           <div className="mb-4 p-3 bg-emerald-50 rounded-lg">
                             <Users className="w-8 h-8 text-brand-green" />
                           </div>
-                          <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-3">5–10 members</h3>
+                          <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-3">Up to 10 members</h3>
                           <p className="text-slate-600 text-sm">
-                            Small groups only, so teamwork stays strong and manageable.
+                            Small groups of up to 10 members, completing the full cycle in one year.
                           </p>
                         </CardContent>
                       </Card>
@@ -521,12 +605,15 @@ function GroupContributionPageContent() {
                           <input
                             type="number"
                             step="0.01"
+                            min="100"
+                            max="5000"
                             required
                             value={formData.contributionAmount}
                             onChange={(e) => setFormData({ ...formData, contributionAmount: e.target.value })}
                             placeholder="27.40"
                             className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green"
                           />
+                          <p className="text-xs text-slate-500 mt-1">Min: $100, Max: $5,000</p>
                         </div>
 
                         <div>
@@ -540,6 +627,7 @@ function GroupContributionPageContent() {
                             <option value="weekly">Weekly</option>
                             <option value="monthly">Monthly</option>
                           </select>
+                          <p className="text-xs text-slate-500 mt-1">Group automatically locks at 10 members</p>
                         </div>
                       </div>
 
@@ -571,32 +659,75 @@ function GroupContributionPageContent() {
                   <CardContent className="p-0">
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h2 className="text-2xl md:text-3xl font-bold mb-2">{selectedGroup.name}</h2>
+                        <div className="flex items-center gap-3 mb-2">
+                          <h2 className="text-2xl md:text-3xl font-bold">{selectedGroup.name}</h2>
+                          {selectedGroup.isLocked && (
+                            <span className="bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                              <Lock className="w-3 h-3" /> Locked
+                            </span>
+                          )}
+                        </div>
                         <p className="text-slate-400 mb-4">{selectedGroup.purpose}</p>
                       </div>
                       <span className="bg-brand-green/20 text-brand-green px-4 py-2 rounded-full font-semibold">{selectedGroup.frequency}</span>
                     </div>
 
-                    {/* Referral Section */}
-                    <div className="border-t border-slate-700 pt-4">
-                      <p className="text-slate-400 text-sm mb-3">Invite Members with Referral Link</p>
-                      <div className="flex flex-col sm:flex-row gap-2">
-                        <input
-                          type="text"
-                          readOnly
-                          value={selectedGroup.referralLink}
-                          className="flex-1 bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-300 text-sm font-mono"
-                        />
-                        <button
-                          onClick={handleCopyReferral}
-                          className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors"
-                        >
-                          {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-                          {copied ? "Copied" : "Copy"}
-                        </button>
+                    {/* Show dates if group is locked */}
+                    {selectedGroup.isLocked && selectedGroup.startDate && selectedGroup.endDate && (
+                      <div className="border-t border-slate-700 pt-4 mb-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-slate-400 text-xs mb-1">Start Date</p>
+                            <p className="text-white font-semibold flex items-center gap-2">
+                              <Calendar className="w-4 h-4" />
+                              {new Date(selectedGroup.startDate).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-slate-400 text-xs mb-1">End Date</p>
+                            <p className="text-white font-semibold flex items-center gap-2">
+                              <Calendar className="w-4 h-4" />
+                              {new Date(selectedGroup.endDate).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <p className="text-slate-500 text-xs mt-2">Code: <span className="font-mono font-semibold text-brand-green">{selectedGroup.referralCode}</span></p>
-                    </div>
+                    )}
+
+                    {/* Referral Section - only show if not locked */}
+                    {!selectedGroup.isLocked && (
+                      <div className="border-t border-slate-700 pt-4">
+                        <p className="text-slate-400 text-sm mb-3">Invite Members with Referral Link</p>
+                        <div className="flex flex-col sm:flex-row gap-2">
+                          <input
+                            type="text"
+                            readOnly
+                            value={selectedGroup.referralLink}
+                            className="flex-1 bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-300 text-sm font-mono"
+                          />
+                          <button
+                            onClick={handleCopyReferral}
+                            className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors"
+                          >
+                            {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                            {copied ? "Copied" : "Copy"}
+                          </button>
+                        </div>
+                        <p className="text-slate-500 text-xs mt-2">Code: <span className="font-mono font-semibold text-brand-green">{selectedGroup.referralCode}</span></p>
+                      </div>
+                    )}
+
+                    {/* Locked group message */}
+                    {selectedGroup.isLocked && (
+                      <div className="border-t border-slate-700 pt-4">
+                        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4">
+                          <p className="text-amber-300 text-sm flex items-center gap-2">
+                            <Lock className="w-4 h-4 flex-shrink-0" />
+                            This group is full ({selectedGroup.members.length}/{selectedGroup.maxMembers} members) and no longer accepting new members
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
@@ -604,8 +735,13 @@ function GroupContributionPageContent() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                   <Card className="border-none shadow-sm rounded-2xl p-6 bg-white">
                     <CardContent className="p-0 text-center">
-                      <p className="text-slate-500 text-sm mb-1">Total Members</p>
-                      <p className="text-3xl font-bold text-slate-900">{selectedGroup.members.length}</p>
+                      <p className="text-slate-500 text-sm mb-1">Members</p>
+                      <p className="text-3xl font-bold text-slate-900">
+                        {selectedGroup.members.length}/{selectedGroup.maxMembers}
+                      </p>
+                      {selectedGroup.isLocked && (
+                        <p className="text-xs text-amber-600 mt-1 font-semibold">Full</p>
+                      )}
                     </CardContent>
                   </Card>
 

@@ -7,6 +7,7 @@ import { Sidebar } from "@/components/sidebar"
 import { Plus, PiggyBank } from "lucide-react"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useToast } from "@/components/ui/use-toast"
 
 interface Pocket {
   id: string
@@ -29,6 +30,7 @@ function SaverPocketsPageContent() {
     multiplier: '1',
     targetAmount: '',
   })
+  const { toast } = useToast()
 
   useEffect(() => {
     const fetchPockets = async () => {
@@ -79,12 +81,24 @@ function SaverPocketsPageContent() {
         setPockets([...pockets, data.data])
         setFormData({ name: '', dailyAmount: '', multiplier: '1', targetAmount: '' })
         setIsModalOpen(false)
+        toast({
+          title: "Success!",
+          description: "Savings pocket created successfully",
+        })
       } else {
-        alert('Failed to create pocket')
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to create pocket",
+        })
       }
     } catch (error) {
       console.error('Error creating pocket:', error)
-      alert('An error occurred')
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An unexpected error occurred",
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -106,7 +120,7 @@ function SaverPocketsPageContent() {
         <DashboardHeader title="Saver Pockets" onMenuClick={() => setIsSidebarOpen(true)} />
         <div className="flex-1 p-2 sm:p-3 md:p-6 lg:p-8 xl:p-10">
           <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 md:space-y-8">
-            <button 
+            <button
               onClick={() => setIsModalOpen(true)}
               className="flex items-center gap-2 bg-brand-green hover:bg-emerald-500 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-lg md:rounded-xl font-semibold transition-colors shadow-sm"
             >

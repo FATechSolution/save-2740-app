@@ -131,11 +131,10 @@ const GroupContributionIcon = ({ className }: { className?: string }) => (
 const navItems = [
   { icon: DashboardIcon, label: "Dashboard", href: "/", isDashboard: true },
   { icon: WalletIcon, label: "My Wallet", href: "/my-wallet", isWallet: true },
-  { icon: TransactionIcon, label: "Transactions", href: "/wallet-transactions" },
-  { icon: AchievementsIcon, label: "Achievements", href: "/achievements" },
   { icon: SaverPocketsIcon, label: "Saver Pockets", href: "/saver-pockets" },
-  { icon: ReferralsIcon, label: "Referrals", href: "/referrals" },
   { icon: GroupContributionIcon, label: "Group Contribution", href: "/group-contribution" },
+  { icon: ReferralsIcon, label: "Referrals", href: "/referrals" },
+  { icon: TransactionIcon, label: "My Transactions", href: "/wallet-transactions" },
   { icon: SubscriptionIcon, label: "Subscription", href: "/subscription" },
 ]
 
@@ -288,26 +287,32 @@ export function Sidebar({ onClose }: SidebarProps) {
       </nav>
 
       {/* Footer Section - Fixed at Bottom */}
-      <div className="flex-shrink-0 p-3 sm:p-4 md:p-6 border-t border-slate-100 space-y-3 sm:space-y-4">
-        <img
-          src="/kyc-button.png"
-          alt="KYC Required"
-          className="h-auto max-h-12 object-contain"
-        />
+      {/* KYC Section - Fixed above footer */}
+      <div className="flex-shrink-0 px-3 sm:px-4 pb-2">
+        <Link href="/profile?tab=kyc" onClick={onClose} prefetch={true}>
+          <img
+            src="/kyc-button.png"
+            alt="KYC Required"
+            className="h-auto max-h-10 object-contain hover:opacity-90 transition-opacity cursor-pointer"
+          />
+        </Link>
+      </div>
 
-        <div className="space-y-3 sm:space-y-4">
+      {/* Footer Section - Fixed at Bottom */}
+      <div className="flex-shrink-0 p-3 sm:p-4 border-t border-slate-100 space-y-2 sm:space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           <img
             src="/profile-section.png"
             alt="User Profile"
-            className="h-auto max-h-12 object-contain cursor-pointer"
+            className="h-auto max-h-10 object-contain cursor-pointer"
             onClick={() => window.location.href = '/profile'}
           />
 
           <button
             onClick={() => setLogoutOpen(true)}
-            className="flex items-center justify-center gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg md:rounded-xl transition-all text-sm sm:text-base text-red-600 hover:bg-red-50 w-full font-medium border border-red-200 hover:border-red-300"
+            className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg md:rounded-xl transition-all text-sm sm:text-base text-red-600 hover:bg-red-50 w-full font-medium border border-red-200 hover:border-red-300"
           >
-            <LogOut className="w-5 h-5 shrink-0" />
+            <LogOut className="w-4 h-4 shrink-0" />
             <span>Logout</span>
           </button>
         </div>

@@ -10,8 +10,9 @@ import { LoadingDelay } from "@/components/loading-delay";
 import { Sidebar } from "@/components/sidebar";
 import { DashboardHeader } from "@/components/dashboard-header";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User, Lock, Shield, Settings, AlertTriangle } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { ProfileOverview } from "@/components/profile/profile-overview";
 import { EditProfile } from "@/components/profile/edit-profile";
 import { ChangePassword } from "@/components/profile/change-password";
@@ -29,8 +30,18 @@ const tabs = [
 
 function ProfilePageContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("profile");
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get("tab") || "profile";
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [subTab, setSubTab] = useState<"overview" | "edit">("overview");
+
+  // Update active tab if URL parameter changes
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab && tabs.some(t => t.id === tab)) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   const renderContent = () => {
     switch (activeTab) {
