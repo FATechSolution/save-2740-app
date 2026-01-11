@@ -69,9 +69,9 @@ export function MilestoneModal() {
         {/* Close button */}
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4 z-10 p-2 hover:bg-slate-100 rounded-full transition-colors"
+          className="absolute top-4 right-4 z-10 p-1 sm:p-2 hover:bg-slate-100 rounded-full transition-colors"
         >
-          <X className="w-5 h-5 text-slate-400" />
+          <X className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
         </button>
 
         {/* Gradient header */}

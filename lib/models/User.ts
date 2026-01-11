@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 export interface IUser extends Document {
   userId: string;
@@ -17,6 +18,7 @@ export interface IUser extends Document {
   kycStatus: 'pending' | 'approved' | 'rejected';
   kycCompletedAt?: Date;
   profileImage?: string;
+  passwordHash: string; // Added field
   preferences: {
     emailNotifications: boolean;
     smsNotifications: boolean;
@@ -26,8 +28,11 @@ export interface IUser extends Document {
   };
   referralCode: string;
   referredBy?: string;
+  emailVerified: boolean; // Added field
   createdAt: Date;
   updatedAt: Date;
+  // Methods
+  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 const userSchema = new Schema<IUser>(
@@ -61,6 +66,10 @@ const userSchema = new Schema<IUser>(
       required: true,
       trim: true,
     },
+    passwordHash: {
+      type: String,
+      required: true,
+    },
     dateOfBirth: Date,
     address: {
       street: String,
@@ -77,6 +86,10 @@ const userSchema = new Schema<IUser>(
     },
     kycCompletedAt: Date,
     profileImage: String,
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
     preferences: {
       emailNotifications: {
         type: Boolean,
@@ -115,6 +128,28 @@ const userSchema = new Schema<IUser>(
     timestamps: true,
   }
 );
+
+// Pre-save hook for password hashing
+userSchema.pre('save', async function (next) {
+  // Only hash if passwordHash is modified (or new) and looks like a plain password (len < 60)
+  // Note: We check if it is modified to avoid re-hashing
+  if (!this.passwordHash) return next();
+
+  if (this.isModified('passwordHash') && this.passwordHash.length < 60) {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
+    } catch (error) {
+      return next(error as Error);
+    }
+  }
+  next();
+});
+
+// Compare password method
+userSchema.methods.comparePassword = async function (candidatePassword: string) {
+  return await bcrypt.compare(candidatePassword, this.passwordHash);
+};
 
 // Create indexes for common queries
 userSchema.index({ createdAt: -1 });

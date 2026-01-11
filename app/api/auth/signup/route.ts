@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { User, EmailVerification } from "@/lib/models/auth.model";
 import { Wallet } from "@/lib/models/wallet.model";
+import bcrypt from "bcryptjs";
+
+// Simple UUID generator to avoid dependency issues
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
 import {
   validateEmail,
   validatePassword,
@@ -65,13 +74,23 @@ export async function POST(req: NextRequest) {
     }
 
     // Create new user
+    // Create new user
+    const userId = uuidv4();
+    const referralCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+    // Hash password before saving
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const user = new User({
+      userId: userId,
       email: email.toLowerCase(),
       firstName: firstName,
-      lastName: firstName,
-      passwordHash: password, // Will be hashed by the model's pre-save hook
-      accountStatus: "active",
+      lastName: firstName, // Using first name as last name for now
+      passwordHash: hashedPassword, // Store hashed password
+      referralCode: referralCode,
       emailVerified: false,
+      accountStatus: 'active',
     });
 
     await user.save();
@@ -83,7 +102,7 @@ export async function POST(req: NextRequest) {
     } else if (selectedChallenge === "monthly") {
       dailySavingAmount = 849.40 / 30; // monthly divided by 30
     }
-    
+
     if (multiplier) {
       dailySavingAmount *= multiplier;
     }
@@ -135,6 +154,28 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error("Signup error:", error);
+    
+    // Handle E11000 duplicate key errors (especially for phoneNumber with null values)
+    if (error instanceof Error && error.message.includes('E11000')) {
+      console.error("E11000 Error details:", error.message);
+      
+      // If it's a phoneNumber duplicate key error
+      if (error.message.includes('phoneNumber')) {
+        return NextResponse.json(
+          { success: false, error: "Database index issue. Please contact support. Error: PHONE_INDEX" },
+          { status: 500 }
+        );
+      }
+      
+      // If it's an email duplicate (shouldn't happen, but just in case)
+      if (error.message.includes('email')) {
+        return NextResponse.json(
+          { success: false, error: "Email already registered" },
+          { status: 409 }
+        );
+      }
+    }
+    
     return NextResponse.json(
       { success: false, error: "An error occurred during signup. Please try again." },
       { status: 500 }

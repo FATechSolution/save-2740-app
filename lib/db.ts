@@ -44,7 +44,32 @@ export async function connectDB(): Promise<Mongoose> {
 
     cached.promise = mongoose
       .connect(MONGODB_URI, opts)
-      .then((mongooseInstance) => {
+      .then(async (mongooseInstance) => {
+        // Fix duplicate key indexes on sparse fields if they exist
+        try {
+          const usersCollection = mongooseInstance.connection.collection('users');
+          const indexes = await usersCollection.getIndexes();
+          
+          console.log('Current indexes:', Object.keys(indexes));
+          
+          // Drop problematic unique indexes on sparse fields
+          const problematicIndexes = ['phoneNumber_1', 'userId_1', 'referralCode_1', 'referredBy_1', 'kycStatus_1'];
+          
+          for (const indexName of problematicIndexes) {
+            if (indexes[indexName]) {
+              console.log(`Dropping old ${indexName} index...`);
+              try {
+                await usersCollection.dropIndex(indexName);
+                console.log(`✓ Successfully dropped ${indexName} index`);
+              } catch (dropError) {
+                console.warn(`Failed to drop ${indexName}:`, (dropError as Error).message);
+              }
+            }
+          }
+        } catch (error) {
+          console.debug('Index inspection note:', (error as Error).message);
+        }
+        
         return mongooseInstance;
       })
       .catch((error) => {

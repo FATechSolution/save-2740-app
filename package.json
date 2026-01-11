@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev -H 0.0.0.0",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "cleanup:indexes": "npx ts-node scripts/cleanup-indexes.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

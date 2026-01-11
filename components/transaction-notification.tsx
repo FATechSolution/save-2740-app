@@ -81,9 +81,9 @@ export function TransactionNotification({
                 onClose(notification.id)
               }, 300)
             }}
-            className="text-white hover:bg-white/20 p-1 rounded transition-colors"
+            className="text-white hover:bg-white/20 p-1 sm:p-1.5 rounded transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
 

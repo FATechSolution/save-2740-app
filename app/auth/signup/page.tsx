@@ -122,16 +122,16 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-6">
-      <div className="w-full max-w-2xl">
+    <div className="min-h-screen bg-white flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-2xl mx-auto">
         {/* Progress Bar */}
         <div className="mb-10">
           <div className="flex items-center justify-between mb-4">
             <button
               onClick={handleBack}
-              className="text-teal-600 hover:text-teal-700 transition-colors"
+              className="text-[#10B981] hover:text-[#0D8659] transition-colors p-1 sm:p-1.5"
             >
-              <ChevronLeft size={24} />
+              <ChevronLeft size={16} className="sm:w-6 sm:h-6" />
             </button>
             <span className="text-sm font-medium text-gray-600">
               Step {step} of 2
@@ -139,7 +139,7 @@ export default function SignUpPage() {
           </div>
           <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
             <div
-              className="h-full bg-teal-600 transition-all duration-300"
+              className="h-full bg-[#10B981] transition-all duration-300"
               style={{ width: `${(step / 2) * 100}%` }}
             ></div>
           </div>
@@ -171,7 +171,7 @@ export default function SignUpPage() {
                   placeholder="e.g Alex Johnson"
                   value={profileData.firstName}
                   onChange={handleProfileChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent placeholder-gray-400 text-gray-900"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:border-transparent placeholder-gray-400 text-gray-900"
                   required
                 />
               </div>
@@ -187,7 +187,7 @@ export default function SignUpPage() {
                   placeholder="name@example.com"
                   value={profileData.email}
                   onChange={handleProfileChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent placeholder-gray-400 text-gray-900"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:border-transparent placeholder-gray-400 text-gray-900"
                   required
                 />
               </div>
@@ -204,7 +204,7 @@ export default function SignUpPage() {
                     placeholder="Your password"
                     value={profileData.password}
                     onChange={handleProfileChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent placeholder-gray-400 text-gray-900 pr-10"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:border-transparent placeholder-gray-400 text-gray-900 pr-10"
                     required
                   />
                   <button
@@ -215,12 +215,15 @@ export default function SignUpPage() {
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  At least 8 characters, 1 uppercase, 1 lowercase, and 1 number
+                </p>
               </div>
 
               {/* Next Button */}
               <button
                 type="submit"
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg transition-colors mt-8"
+                className="w-full bg-[#10B981] hover:bg-[#0D8659] text-white font-bold py-3 px-6 rounded-lg transition-colors mt-8"
               >
                 Next: Choose Challenge
               </button>
@@ -230,7 +233,7 @@ export default function SignUpPage() {
             <div className="mt-6 text-center">
               <p className="text-gray-600 text-sm">
                 Already have an account?{" "}
-                <Link href="/auth/login" className="text-teal-600 hover:text-teal-700 font-bold">
+                <Link href="/auth/login" className="text-[#10B981] hover:text-[#0D8659] font-bold">
                   Login
                 </Link>
               </p>
@@ -241,21 +244,21 @@ export default function SignUpPage() {
         {/* Step 2 - Choose Challenge */}
         {step === 2 && (
           <div className="max-w-lg mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Choose Your Challenge</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 md:mb-8">Choose Your Challenge</h2>
 
             {/* Challenge Options */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6 md:mb-8">
               {Object.entries(challenges).map(([key, challenge]) => (
                 <button
                   key={key}
                   onClick={() => setChallengeData({ ...challengeData, selectedChallenge: key })}
-                  className={`p-6 rounded-lg border-2 transition-all ${challengeData.selectedChallenge === key
-                    ? "border-teal-600 bg-blue-50"
+                  className={`p-3 sm:p-4 md:p-6 rounded-lg border-2 transition-all ${challengeData.selectedChallenge === key
+                    ? "border-[#10B981] bg-blue-50"
                     : "border-gray-200 bg-white hover:border-gray-300"
                     }`}
                 >
-                  <div className="font-bold text-gray-900">{challenge.name}</div>
-                  <div className="text-sm text-gray-600">
+                  <div className="font-bold text-sm sm:text-base md:text-lg text-gray-900">{challenge.name}</div>
+                  <div className="text-xs sm:text-sm text-gray-600">
                     ${challenge.base.toFixed(2)} Base
                   </div>
                 </button>
@@ -263,45 +266,48 @@ export default function SignUpPage() {
             </div>
 
             {/* Multiplier Selection */}
-            <div className="mb-8">
-              <div className="font-bold text-gray-900 mb-6">
+            <div className="mb-4 sm:mb-6 md:mb-8">
+              <div className="font-bold text-sm sm:text-base md:text-lg text-gray-900 mb-3 sm:mb-4 md:mb-6">
                 <span className="text-gray-700">Multiplier: </span>
                 <span className="text-teal-600">x{challengeData.selectedMultiplier}</span>
               </div>
 
-              {/* Slider with track and labels */}
-              <div className="relative">
-                {/* Track container */}
-                <div className="relative h-10 mb-2">
-                  {/* Background track */}
-                  <div className="absolute top-3 left-0 right-0 h-2 bg-blue-100 rounded-full"></div>
+              {/* Slider */}
+              <div className="relative mb-3 sm:mb-4 md:mb-6">
+                <input
+                  type="range"
+                  min="1"
+                  max="10"
+                  step="1"
+                  value={challengeData.selectedMultiplier}
+                  onChange={(e) => setChallengeData({ ...challengeData, selectedMultiplier: parseInt(e.target.value) })}
+                  className="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer accent-[#10B981]"
+                />
 
-                  {/* Active track */}
-                  <div
-                    className="absolute top-3 h-2 bg-teal-600 rounded-full transition-all duration-200"
-                    style={{
-                      width: `calc(${((challengeData.selectedMultiplier - 1) / 9) * 100}% + 8px)`,
-                    }}
-                  ></div>
-
-                  {/* Slider dot */}
-                  <div
-                    className="absolute top-0 w-8 h-8 bg-teal-600 rounded-full border-4 border-white shadow-lg transition-all duration-200 cursor-pointer"
-                    style={{
-                      left: `${((challengeData.selectedMultiplier - 1) / 9) * 100}%`,
-                      transform: 'translateX(-50%)',
-                    }}
-                  ></div>
+                {/* Labels row - Mobile: Show only odd numbers for better spacing */}
+                <div className="md:hidden flex justify-between text-xs font-medium text-gray-700 px-0 mt-2">
+                  {[1, 3, 5, 7, 9].map((mult) => (
+                    <button
+                      key={mult}
+                      onClick={() => setChallengeData({ ...challengeData, selectedMultiplier: mult })}
+                      className={`transition-colors min-w-[40px] text-center py-1 px-2 rounded ${challengeData.selectedMultiplier === mult
+                        ? "text-[#10B981] font-bold bg-[#D1FAE5]"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                        }`}
+                    >
+                      x{mult}
+                    </button>
+                  ))}
                 </div>
 
-                {/* Labels row */}
-                <div className="flex justify-between text-sm font-medium text-gray-700 px-1">
+                {/* Labels row - Desktop: Show all numbers */}
+                <div className="hidden md:flex justify-between text-sm font-medium text-gray-700 px-1 mt-2">
                   {Array.from({ length: 10 }, (_, i) => i + 1).map((mult) => (
                     <button
                       key={mult}
                       onClick={() => setChallengeData({ ...challengeData, selectedMultiplier: mult })}
-                      className={`transition-colors ${challengeData.selectedMultiplier === mult
-                        ? "text-teal-600 font-bold"
+                      className={`transition-colors min-w-[24px] text-center ${challengeData.selectedMultiplier === mult
+                        ? "text-[#10B981] font-bold"
                         : "text-gray-600 hover:text-gray-900"
                         }`}
                     >
@@ -313,20 +319,20 @@ export default function SignUpPage() {
             </div>
 
             {/* Commitment Card */}
-            <div className="bg-gray-900 rounded-2xl p-8 mb-8 text-white">
-              <div className="flex items-center justify-between">
+            <div className="bg-gray-900 rounded-lg sm:rounded-xl md:rounded-2xl p-4 sm:p-5 md:p-8 mb-4 sm:mb-6 md:mb-8 text-white">
+              <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-3 sm:gap-4 md:gap-6 text-center sm:text-left">
                 <div>
-                  <div className="text-sm text-gray-400 mb-2">Your Commitment</div>
-                  <div className="text-5xl font-bold text-teal-400">
+                  <div className="text-[10px] sm:text-xs md:text-sm text-gray-400 mb-1">Your Commitment</div>
+                  <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#10B981]">
                     ${dailyAmount.toFixed(2)}
                   </div>
-                  <div className="text-sm text-gray-400 mt-2">per Day</div>
+                  <div className="text-[10px] sm:text-xs md:text-sm text-gray-400 mt-1">per Day</div>
                 </div>
-                <div className="text-right">
-                  <div className="text-3xl font-bold text-white">
+                <div className="text-center sm:text-right border-t sm:border-t-0 border-gray-800 pt-3 sm:pt-0 w-full sm:w-auto">
+                  <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-white">
                     ${currentChallenge.yearlyGoal.toLocaleString()}
                   </div>
-                  <div className="text-sm text-gray-400 mt-2">Yearly Goal</div>
+                  <div className="text-[10px] sm:text-xs md:text-sm text-gray-400 mt-1">Yearly Goal</div>
                 </div>
               </div>
             </div>
@@ -335,7 +341,7 @@ export default function SignUpPage() {
             <button
               onClick={handleCompleteSignup}
               disabled={isLoading}
-              className="w-full bg-teal-600 hover:bg-teal-700 disabled:opacity-50 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+              className="w-full bg-[#10B981] hover:bg-[#0D8659] disabled:opacity-50 text-white font-bold py-3 px-4 sm:px-6 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
             >
               {isLoading ? "Creating Account..." : "Start Saving Now →"}
             </button>

@@ -3,12 +3,17 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 
 export interface IUser extends Document {
+  userId?: string;
   email: string;
   firstName: string;
   lastName: string;
+  phoneNumber?: string;
   passwordHash: string;
   profileImage?: string;
   emailVerified: boolean;
+  kycStatus?: 'pending' | 'approved' | 'rejected';
+  referralCode?: string;
+  referredBy?: string;
   biometricEnabled: boolean;
   biometricCredentials?: {
     credentialId: string;
@@ -27,6 +32,12 @@ export interface IUser extends Document {
 
 const UserSchema = new Schema<IUser>(
   {
+    userId: {
+      type: String,
+      sparse: true,
+      trim: true,
+      unique: false,
+    },
     email: {
       type: String,
       required: true,
@@ -44,6 +55,12 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: true,
       trim: true,
+    },
+    phoneNumber: {
+      type: String,
+      sparse: true,
+      trim: true,
+      unique: false,
     },
     passwordHash: {
       type: String,
@@ -77,6 +94,22 @@ const UserSchema = new Schema<IUser>(
     },
     lastFailedLogin: Date,
     lastLogin: Date,
+    kycStatus: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending',
+    },
+    referralCode: {
+      type: String,
+      sparse: true,
+      trim: true,
+      unique: false,
+    },
+    referredBy: {
+      type: String,
+      sparse: true,
+      trim: true,
+    },
   },
   { timestamps: true }
 );

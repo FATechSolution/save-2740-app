@@ -153,6 +153,9 @@ export function Sidebar({ onClose }: SidebarProps) {
   const [logoutOpen, setLogoutOpen] = useState(false)
   const [user, setUser] = useState<UserData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showScrollUp, setShowScrollUp] = useState(false)
+  const [showScrollDown, setShowScrollDown] = useState(false)
+  const navRef = useState<HTMLElement | null>(null)[0]
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -177,6 +180,21 @@ export function Sidebar({ onClose }: SidebarProps) {
     fetchUser()
   }, [])
 
+  // Update scroll button visibility
+  const updateScrollButtons = (element: HTMLElement) => {
+    if (!element) return
+    const { scrollTop, scrollHeight, clientHeight } = element
+    setShowScrollUp(scrollTop > 20)
+    setShowScrollDown(scrollTop + clientHeight < scrollHeight - 20)
+  }
+
+  const handleScroll = (direction: 'up' | 'down') => {
+    const nav = document.getElementById('sidebar-nav')
+    if (!nav) return
+    const scrollAmount = direction === 'up' ? -200 : 200
+    nav.scrollBy({ top: scrollAmount, behavior: 'smooth' })
+  }
+
   return (
     <div className="w-full lg:w-64 bg-white h-full flex flex-col border-r border-slate-100">
       {/* Header Section - Fixed */}
@@ -194,97 +212,147 @@ export function Sidebar({ onClose }: SidebarProps) {
         </div>
       </div>
 
-      {/* Navigation - Scrollable */}
-      <nav
-        id="sidebar-nav"
-        className="flex-1 overflow-y-auto hide-scrollbar px-3 sm:px-4 md:px-6 space-y-0.5 sm:space-y-1 md:space-y-2 pb-4"
-        onScroll={(e) => {
-          const target = e.target as HTMLElement;
-          sessionStorage.setItem('sidebar-scroll', target.scrollTop.toString());
-        }}
-        ref={(el) => {
-          if (el) {
-            // Restore scroll position immediately on mount
-            const savedScroll = sessionStorage.getItem('sidebar-scroll');
-            if (savedScroll) {
-              el.scrollTop = parseInt(savedScroll, 10);
-            }
-          }
-        }}
-      >
-        {navItems.map((item, index) => {
-          const isActive = pathname === item.href
-          return (
-            <Link
-              key={item.label}
-              href={item.href}
-              onClick={onClose}
-              prefetch={true}
-              className={cn(
-                "flex items-center gap-3 px-1 sm:px-1.5 md:px-2 py-1.5 sm:py-2 md:py-3 rounded-lg md:rounded-xl transition-colors text-xs sm:text-sm md:text-base",
-                isActive ? "bg-emerald-50 text-brand-green font-medium shadow-sm" : "text-slate-500",
-              )}
-              style={{ animationDelay: `${index * 50}ms` }}
+      {/* Navigation Container with Scroll Buttons */}
+      <div className="flex-1 relative overflow-hidden">
+        {/* Scroll Up Button */}
+        {showScrollUp && (
+          <button
+            onClick={() => handleScroll('up')}
+            className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-white via-white to-transparent py-2 flex justify-center items-center text-slate-600 hover:text-brand-green transition-colors"
+            aria-label="Scroll up"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              {item.isDashboard ? (
-                <item.icon className="w-4 h-4 sm:w-5 md:w-5 h-4 md:h-5 shrink-0" />
-              ) : (
-                <item.icon className="w-4 h-4 sm:w-5 md:w-5 h-4 md:h-5 shrink-0" />
-              )}
-              <span className="truncate">{item.label}</span>
-            </Link>
-          )
-        })}
+              <path d="M15 12l-5-5-5 5" />
+            </svg>
+          </button>
+        )}
 
-        {/* Useful Links Section */}
-        <div className="pt-4 mt-4 border-t border-slate-100">
-          <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider px-2 sm:px-3 md:px-4 mb-2">
-            Useful Links
-          </h3>
-          <div className="space-y-1">
-            <Link
-              href="/privacy-policy"
-              onClick={onClose}
-              prefetch={true}
-              className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms-conditions"
-              onClick={onClose}
-              prefetch={true}
-              className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
-            >
-              Terms & Conditions
-            </Link>
-            <Link
-              href="/savings-challenge-disclaimer"
-              onClick={onClose}
-              prefetch={true}
-              className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
-            >
-              Savings Challenge Disclaimer
-            </Link>
-            <Link
-              href="/subscription-refund-policy"
-              onClick={onClose}
-              prefetch={true}
-              className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
-            >
-              Subscription & Refund Policy
-            </Link>
-            <Link
-              href="/affiliate-referral-policy"
-              onClick={onClose}
-              prefetch={true}
-              className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
-            >
-              Affiliate / Referral Policy
-            </Link>
+        {/* Navigation - Scrollable */}
+        <nav
+          id="sidebar-nav"
+          className="h-full overflow-y-auto custom-scrollbar px-3 sm:px-4 md:px-6 space-y-0.5 sm:space-y-1 md:space-y-2 pb-4"
+          onScroll={(e) => {
+            const target = e.target as HTMLElement;
+            sessionStorage.setItem('sidebar-scroll', target.scrollTop.toString());
+            updateScrollButtons(target);
+          }}
+          ref={(el) => {
+            if (el) {
+              // Restore scroll position immediately on mount
+              const savedScroll = sessionStorage.getItem('sidebar-scroll');
+              if (savedScroll) {
+                el.scrollTop = parseInt(savedScroll, 10);
+              }
+              // Initial check for scroll buttons
+              updateScrollButtons(el);
+            }
+          }}
+        >
+          {navItems.map((item, index) => {
+            const isActive = pathname === item.href
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={onClose}
+                prefetch={true}
+                className={cn(
+                  "flex items-center gap-3 px-1 sm:px-1.5 md:px-2 py-1.5 sm:py-2 md:py-3 rounded-lg md:rounded-xl transition-colors text-xs sm:text-sm md:text-base",
+                  isActive ? "bg-emerald-50 text-brand-green font-medium shadow-sm" : "text-slate-500",
+                )}
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                {item.isDashboard ? (
+                  <item.icon className="w-4 h-4 sm:w-5 md:w-5 h-4 md:h-5 shrink-0" />
+                ) : (
+                  <item.icon className="w-4 h-4 sm:w-5 md:w-5 h-4 md:h-5 shrink-0" />
+                )}
+                <span className="truncate">{item.label}</span>
+              </Link>
+            )
+          })}
+
+          {/* Useful Links Section */}
+          <div className="pt-4 mt-4 border-t border-slate-100">
+            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider px-2 sm:px-3 md:px-4 mb-2">
+              Useful Links
+            </h3>
+            <div className="space-y-1">
+              <Link
+                href="/privacy-policy"
+                onClick={onClose}
+                prefetch={true}
+                className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms-conditions"
+                onClick={onClose}
+                prefetch={true}
+                className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
+              >
+                Terms & Conditions
+              </Link>
+              <Link
+                href="/savings-challenge-disclaimer"
+                onClick={onClose}
+                prefetch={true}
+                className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
+              >
+                Savings Challenge Disclaimer
+              </Link>
+              <Link
+                href="/subscription-refund-policy"
+                onClick={onClose}
+                prefetch={true}
+                className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
+              >
+                Subscription & Refund Policy
+              </Link>
+              <Link
+                href="/affiliate-referral-policy"
+                onClick={onClose}
+                prefetch={true}
+                className="flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-brand-green transition-colors"
+              >
+                Affiliate / Referral Policy
+              </Link>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+
+        {/* Scroll Down Button */}
+        {showScrollDown && (
+          <button
+            onClick={() => handleScroll('down')}
+            className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-white via-white to-transparent py-2 flex justify-center items-center text-slate-600 hover:text-brand-green transition-colors"
+            aria-label="Scroll down"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M5 8l5 5 5-5" />
+            </svg>
+          </button>
+        )}
+      </div>
 
       {/* Footer Section - Fixed at Bottom */}
       {/* KYC Section - Fixed above footer */}
